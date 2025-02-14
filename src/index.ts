@@ -24,20 +24,13 @@ export default () =>
 					if (!s) s = new MagicString(code);
 					const path = match[1].slice(1, -1);
 
-					console.log(path, {
-						importer: args.path,
-						kind: "url-token",
-						namespace: "import-meta-url-file",
-						resolveDir: dirname(args.path),
-					});
-					console.log({ ...match, input: undefined });
-
 					const resolved = await resolve(path, {
 						importer: args.path,
 						kind: "url-token",
 						namespace: "file",
-						resolveDir: args.path,
+						resolveDir: dirname(args.path),
 					});
+
 					warnings.push(...resolved.warnings);
 					if (resolved.errors.length) {
 						errors.push(...resolved.errors);
@@ -57,7 +50,6 @@ export default () =>
 
 function transformResult(s: MagicString): string {
 	const code = s.toString();
-	console.log(code);
 	const map = s.generateMap();
 	return `${code}\n//# sourceMappingURL=${map.toUrl()}`;
 }
