@@ -1,10 +1,10 @@
-name: reviewdog
+name: Review
 on:
   push:
   pull_request:
 jobs:
-  linter_name:
-    name: runner / <linter-name>
+  linters:
+    name: runner / Linters
     runs-on: ubuntu-latest
     permissions:
       checks: write
