@@ -71,7 +71,7 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 					copyFile(resolved.path, joinPath(outDir, outFileName));
 				}
 
-				return { contents: s ? transformResult(s) : code };
+				return { contents: s ? transformResult(s) : code, warnings, errors };
 			});
 		},
 	};
