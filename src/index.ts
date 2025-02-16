@@ -1,5 +1,3 @@
-import type { Plugin } from "esbuild";
-import MagicString from "magic-string";
 import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import { copyFile, readFile } from "node:fs/promises";
@@ -11,6 +9,8 @@ import {
 	relative,
 	resolve as resolvePath,
 } from "node:path";
+import type { Plugin } from "esbuild";
+import MagicString from "magic-string";
 
 export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 	<Plugin>{
@@ -30,7 +30,6 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 
 				let s: MagicString | undefined;
 				const warnings = [];
-				const errors = [];
 				for (
 					let match = assetImportMetaUrlRE.exec(code);
 					match != null;
@@ -48,7 +47,7 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 
 					warnings.push(...resolved.warnings);
 					if (resolved.errors.length) {
-						errors.push(...resolved.errors);
+						warnings.push(...resolved.errors);
 						continue;
 					}
 					const buffer = await readFile(resolved.path);
@@ -71,7 +70,10 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 					copyFile(resolved.path, joinPath(outDir, outFileName));
 				}
 
-				return { contents: s ? transformResult(s) : code, warnings, errors };
+				return {
+					contents: s ? transformResult(s) : code,
+					warnings,
+				};
 			});
 		},
 	};

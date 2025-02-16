@@ -1,8 +1,7 @@
-// rollup.config.js
+import { isBuiltin } from "node:module";
 import typescript from "@rollup/plugin-typescript";
 import { dts } from "rollup-plugin-dts";
 import pkg from "./package.json" with { type: "json" };
-import { isBuiltin } from "node:module";
 
 const external = (id) =>
 	isBuiltin(id) || pkg.dependencies[id] || pkg.peerDependencies[id];
