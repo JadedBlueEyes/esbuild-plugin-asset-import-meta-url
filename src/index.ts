@@ -35,7 +35,6 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 					match != null;
 					match = assetImportMetaUrlRE.exec(code)
 				) {
-					if (!s) s = new MagicString(code);
 					const path = match[1].slice(1, -1);
 
 					const resolved = await resolve(path, {
@@ -50,6 +49,9 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 						warnings.push(...resolved.errors);
 						continue;
 					}
+
+					if (!s) s = new MagicString(code);
+
 					const buffer = await readFile(resolved.path);
 					const hash = createHash("sha1")
 						.update(buffer)
