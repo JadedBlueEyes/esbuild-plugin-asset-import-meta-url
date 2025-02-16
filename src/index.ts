@@ -63,13 +63,14 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 						.replace("[name]", name)
 						.replace("[hash]", hash)
 						.replace("[extname]", ext);
-
+					const outfile = joinPath(outDir, outFileName);
+					copyFile(resolved.path, outfile);
+					// We assume that all chunks are written to the root of the output directory, so we build the URL relative to the output directory
 					s.update(
 						match.index,
 						assetImportMetaUrlRE.lastIndex,
-						`new URL(${JSON.stringify(relative(dirname(args.path), resolved.path))}, import.meta.url)`,
+						`new URL(${JSON.stringify(relative(outDir, outfile))}, import.meta.url)`,
 					);
-					copyFile(resolved.path, joinPath(outDir, outFileName));
 				}
 
 				return {
