@@ -2,7 +2,6 @@
   "name": "esbuild-plugin-asset-import-meta-url",
   "version": "0.1.4",
   "description": "Adds support for the new URL import syntax",
-  "type": "module",
   "main": "dist/index.esm.js",
   "exports": {
     "import": "./dist/index.esm.js",
