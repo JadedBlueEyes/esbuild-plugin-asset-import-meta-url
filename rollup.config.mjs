@@ -9,6 +9,7 @@ const external = (id) =>
 export default [
 	{
 		input: "src/index.ts",
+		
 		output: [
 			{ file: pkg.exports.require, format: "cjs" },
 			{ file: pkg.exports.import, format: "es" },
