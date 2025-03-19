@@ -12,11 +12,17 @@ import {
 import type { Plugin } from "esbuild";
 import MagicString from "magic-string";
 
-export default ({ fileName = "[name].[hash][extname]" } = {}) =>
+export default ({ fileName: givenFileName }: { fileName?: string } = {}) =>
 	<Plugin>{
 		name: "asset-import-meta-url",
 		setup({ onLoad, resolve, initialOptions }) {
-			const { absWorkingDir = process.cwd(), outdir, outfile } = initialOptions;
+			const {
+				absWorkingDir = process.cwd(),
+				outdir,
+				outfile,
+				assetNames,
+			} = initialOptions;
+			const fileName = givenFileName ?? assetNames ?? "[name]-[hash]";
 			const outDir = resolvePath(
 				absWorkingDir,
 				outdir || dirname(outfile || "."),
@@ -58,11 +64,14 @@ export default ({ fileName = "[name].[hash][extname]" } = {}) =>
 						.digest("hex")
 						.slice(0, 16);
 					const ext = extname(resolved.path);
+					const dir = dirname(resolved.path);
 					const name = basename(resolved.path, ext);
-					const outFileName = fileName
-						.replace("[name]", name)
-						.replace("[hash]", hash)
-						.replace("[extname]", ext);
+					const outFileName =
+						fileName
+							.replace("[dir]", dir)
+							.replace("[name]", name)
+							.replace("[hash]", hash)
+							.replace("[ext]", ext.slice(1)) + ext;
 					const outfile = joinPath(outDir, outFileName);
 					copyFile(resolved.path, outfile);
 					// We assume that all chunks are written to the root of the output directory, so we build the URL relative to the output directory

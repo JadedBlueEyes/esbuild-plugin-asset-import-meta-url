@@ -41,7 +41,7 @@ The plugin accepts an options object with the following properties:
 
 ```ts
 interface Options {
-fileName?: string; // Default: "[name].[hash][extname]"
+fileName?: string; // Accepts the same options as output.assetNames. Default: "[name]-[hash]"
 }
 ```
 
