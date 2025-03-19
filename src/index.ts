@@ -12,7 +12,7 @@ import {
 import type { Plugin } from "esbuild";
 import MagicString from "magic-string";
 
-export default ({ fileName: givenFileName }: { fileName?: string } = {}) =>
+export default ({ fileName: givenFileName, resolveDir }: { fileName?: string, resolveDir?: string } = {}) =>
 	<Plugin>{
 		name: "asset-import-meta-url",
 		setup({ onLoad, resolve, initialOptions }) {
@@ -25,7 +25,7 @@ export default ({ fileName: givenFileName }: { fileName?: string } = {}) =>
 			const fileName = givenFileName ?? assetNames ?? "[name]-[hash]";
 			const outDir = resolvePath(
 				absWorkingDir,
-				outdir || dirname(outfile || "."),
+				resolveDir ?? outdir ?? dirname(outfile || "."),
 			);
 
 			onLoad({ filter: /.*\.js$/, namespace: "file" }, async (args) => {

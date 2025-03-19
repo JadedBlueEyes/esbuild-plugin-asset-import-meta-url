@@ -41,7 +41,8 @@ The plugin accepts an options object with the following properties:
 
 ```ts
 interface Options {
-fileName?: string; // Accepts the same options as output.assetNames. Default: "[name]-[hash]"
+  fileName?: string; // Accepts the same options as output.assetNames. Default: "[name]-[hash]"
+  resolveDir?: string; // The directory to resolve relative paths from. Should be where your javascript files are outputted to. Defaults to the output directory.
 }
 ```
 
