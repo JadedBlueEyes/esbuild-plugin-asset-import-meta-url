@@ -1,6 +1,5 @@
 import { isBuiltin } from "node:module";
 import typescript from "@rollup/plugin-typescript";
-import { dts } from "rollup-plugin-dts";
 import pkg from "./package.json" with { type: "json" };
 
 const external = (id) =>
@@ -14,13 +13,7 @@ export default [
 			{ file: pkg.exports.require, format: "cjs" },
 			{ file: pkg.exports.import, format: "es" },
 		],
-		plugins: [typescript()],
+		plugins: [typescript({ declaration: true, declarationDir: "dist" })],
 		external,
-	},
-	{
-		input: "src/index.ts",
-		output: [{ file: pkg.exports.types, format: "es" }],
-		plugins: [dts()],
-		external,
-	},
+	}
 ];
